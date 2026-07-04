@@ -11,7 +11,7 @@ interface StatusIconProps {
 }
 
 export function StatusIcon({ status, size = "md", className }: StatusIconProps) {
-  const dim = size === "sm" ? "w-4 h-4" : size === "lg" ? "w-6 h-6" : "w-5 h-5"
+  const dim = size === "sm" ? "size-4" : size === "lg" ? "size-6" : "size-5"
   const iconSize = size === "sm" ? 9 : size === "lg" ? 12 : 10
 
   if (status === "done") {
@@ -23,13 +23,12 @@ export function StatusIcon({ status, size = "md", className }: StatusIconProps) 
   }
   if (status === "inprogress") {
     return (
-      <span className={cn(dim, "rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0", className)}>
+      <span className={cn(dim, "rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0", className)}>
         <Play size={iconSize} className="text-white fill-white" />
       </span>
     )
   }
-  // todo
   return (
-    <span className={cn(dim, "rounded-full border-2 border-gray-300 flex-shrink-0 bg-white", className)} />
+    <span className={cn(dim, "rounded-full border-2 border-border flex-shrink-0 bg-card", className)} />
   )
 }

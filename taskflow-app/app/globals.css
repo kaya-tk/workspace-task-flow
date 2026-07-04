@@ -1,23 +1,105 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:          var(--background);
+  --color-foreground:          var(--foreground);
+  --color-card:                var(--card);
+  --color-card-foreground:     var(--card-foreground);
+  --color-muted:               var(--muted);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-border:              var(--border);
+  --color-input:               var(--input);
+  --color-ring:                var(--ring);
+  --color-primary:             var(--primary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-secondary:           var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent:              var(--accent);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-destructive:         var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-sidebar:             var(--sidebar);
+  --color-sidebar-foreground:  var(--sidebar-foreground);
+  --color-sidebar-accent:      var(--sidebar-accent);
+  --color-sidebar-border:      var(--sidebar-border);
+  --color-sidebar-muted:       var(--sidebar-muted);
+  --radius-sm:  calc(var(--radius) * 0.6);
+  --radius-md:  calc(var(--radius) * 0.8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
+  --font-sans:  var(--font-inter), "Hiragino Sans", "BIZ UDPGothic", "Yu Gothic UI", system-ui, sans-serif;
+
+  /* ── Font size scale: +2px across the board ── */
+  --text-xs:   0.875rem;   /* 14px  (default 12px) */
+  --text-sm:   1rem;       /* 16px  (default 14px) */
+  --text-base: 1.125rem;   /* 18px  (default 16px) */
+  --text-lg:   1.25rem;    /* 20px  (default 18px) */
+  --text-xl:   1.375rem;   /* 22px  (default 20px) */
+  --text-2xl:  1.625rem;   /* 26px  (default 24px) */
+  --text-3xl:  2rem;       /* 32px  (default 30px) */
 }
 
-* { box-sizing: border-box; }
+:root {
+  /* ── Backlog-inspired green theme ── */
 
-body {
-  background: #ffffff;
-  color: #111827;
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  font-size: 15px;
+  /* Page / panel backgrounds */
+  --background:    oklch(0.963 0.003 90);   /* warm light gray */
+  --foreground:    oklch(0.215 0.005 90);   /* dark gray text */
+  --card:          oklch(1.0   0     0);    /* white panels */
+  --card-foreground: oklch(0.215 0.005 90);
+  --muted:         oklch(0.940 0.005 90);
+  --muted-foreground: oklch(0.510 0.005 90);
+  --border:        oklch(0.880 0.005 90);
+  --input:         oklch(0.880 0.005 90);
+  --ring:          oklch(0.540 0.110 165);
+
+  /* Primary = Backlog teal-green */
+  --primary:           oklch(0.540 0.110 165);
+  --primary-foreground: oklch(0.98  0.010 165);
+
+  /* Secondary */
+  --secondary:           oklch(0.940 0.005 90);
+  --secondary-foreground: oklch(0.215 0.005 90);
+
+  /* Accent = light green tint for hover */
+  --accent:           oklch(0.920 0.025 165);
+  --accent-foreground: oklch(0.390 0.100 155);
+
+  /* Destructive */
+  --destructive:           oklch(0.620 0.140 25);
+  --destructive-foreground: oklch(0.98  0     0);
+
+  /* ── Sidebar (Pane 1) — #66cdaa Medium Aquamarine ── */
+  --sidebar:         oklch(0.760 0.100 165);   /* #66cdaa */
+  --sidebar-foreground: oklch(0.18  0.030 165);
+  --sidebar-accent:  oklch(0.870 0.055 165);   /* lighter tint for active/hover */
+  --sidebar-border:  oklch(0.680 0.095 165);
+  --sidebar-muted:   oklch(0.350 0.050 165);   /* muted text in sidebar */
+
+  --radius: 0.5rem;
 }
 
-[contenteditable]:focus { outline: none; }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+@layer base {
+  * {
+    @apply border-border box-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow: hidden;
+    height: 100vh;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Slim scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: oklch(0.80 0.005 90); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(0.70 0.010 90); }
+  [contenteditable]:focus { outline: none; }
+}

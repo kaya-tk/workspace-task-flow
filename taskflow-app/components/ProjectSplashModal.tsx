@@ -16,8 +16,8 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
   const [buttonVisible, setButtonVisible] = useState(false)
 
   useEffect(() => {
-    const t1 = setTimeout(() => setShowButton(true), 2800)
-    const t2 = setTimeout(() => setButtonVisible(true), 3000)
+    const t1 = setTimeout(() => setShowButton(true), 800)
+    const t2 = setTimeout(() => setButtonVisible(true), 1000)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
@@ -30,7 +30,7 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
       onClick={buttonVisible ? onClose : undefined}
     >
       <div
-        className="relative bg-white rounded-2xl shadow-2xl mx-6 max-w-lg w-full overflow-hidden"
+        className="relative bg-card rounded-2xl shadow-2xl mx-6 max-w-lg w-full overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* カラーバー */}
@@ -43,7 +43,7 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
               className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: project.color }}
             />
-            <span className="text-xs font-semibold text-gray-400 tracking-wide uppercase">
+            <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">
               {project.name}
             </span>
           </div>
@@ -52,10 +52,10 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
           {meta?.targetOutcome && (
             <div className="mb-5">
               <div className="flex items-center gap-1.5 mb-2">
-                <Target size={13} className="text-gray-400" />
-                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">達成目標</span>
+                <Target size={13} className="text-muted-foreground" />
+                <span className="text-[13px] font-semibold text-muted-foreground uppercase tracking-widest">達成目標</span>
               </div>
-              <p className="text-[15px] font-bold text-gray-900 leading-relaxed whitespace-pre-line">
+              <p className="text-[17px] font-bold text-foreground leading-relaxed whitespace-pre-line">
                 {meta.targetOutcome}
               </p>
             </div>
@@ -63,12 +63,12 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
 
           {/* KPI */}
           {meta?.kpiSummary && (
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-border">
               <div className="flex items-center gap-1.5 mb-2">
-                <BarChart2 size={13} className="text-gray-400" />
-                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">KPI</span>
+                <BarChart2 size={13} className="text-muted-foreground" />
+                <span className="text-[13px] font-semibold text-muted-foreground uppercase tracking-widest">リスク・注意事項</span>
               </div>
-              <p className="text-[12px] text-gray-500 leading-relaxed whitespace-pre-line">
+              <p className="text-[14px] text-muted-foreground leading-relaxed whitespace-pre-line">
                 {meta.kpiSummary}
               </p>
             </div>
@@ -81,8 +81,8 @@ export function ProjectSplashModal({ project, meta, onClose }: ProjectSplashModa
               className={cn(
                 "px-6 py-2 rounded-xl text-sm font-semibold transition-all duration-500",
                 buttonVisible
-                  ? "bg-gray-900 text-white opacity-100 hover:bg-gray-700 cursor-pointer"
-                  : "bg-gray-100 text-gray-300 opacity-0 cursor-default pointer-events-none"
+                  ? "bg-foreground text-background opacity-100 hover:opacity-80 cursor-pointer"
+                  : "bg-muted text-muted-foreground/30 opacity-0 cursor-default pointer-events-none"
               )}
             >
               よし、やるぞ

@@ -10,7 +10,6 @@ export const INITIAL_PROJECT_META: Record<string, ProjectMeta> = {
     kpiSummary: "Note記事9本 / Xポスト約330本（両垢合算）/ AI透明性エピソード毎記事1〜2回 / 連動引用RT実施率80%以上",
     period: "2026/4/26（Day 1）〜 2026/6/24（Day 60）",
     risks: "【リスク1】執筆ペース低下 → 月3本・短記事（1,500字）に切替可\n【リスク6】6ポスト/日崩壊 → 週15h超えでAI下書き寄せ・4ポストに減量\n【リスク7】両垢の連動希薄化 → セナ垢3ポスト中2ポストにハル言及必須",
-    comments: "",
   },
   notes: {
     description: "60日間で無料記事8本＋有料記事1本を公開するNote記事管理プロジェクト。\n4本柱：AI×業務効率化 / 副業体験記 / 副業×AI / スタンス記事",
@@ -18,7 +17,6 @@ export const INITIAL_PROJECT_META: Record<string, ProjectMeta> = {
     kpiSummary: "1記事あたりPV 100〜300 / スキ 5〜15 / 保存 1〜3 / AI透明性エピソード毎記事1〜2回",
     period: "2026/5/2（記事0公開）〜 2026/6/21（Note 8公開）",
     risks: "【リスク1】執筆ペース低下 → 月3本・1,500字に切替可\n【リスク3】性別非公開設定の漏れ → 公開前チェックリスト必須\n【リスク4】辛口とブランド原則の衝突 → 辛口はセナ経由のみ",
-    comments: "",
   },
   "x-ops": {
     description: "ハル垢（Note発信源）＋セナ垢（拡散・誘導装置）の2アカウントを同時運用するX戦略プロジェクト。\n1日6ポスト体制（ハル3＋セナ3）。",
@@ -26,7 +24,6 @@ export const INITIAL_PROJECT_META: Record<string, ProjectMeta> = {
     kpiSummary: "1日6ポスト / 連動引用RT日次最低1回 / セナ垢ハル言及率60%以上 / Note公開日三段ロケット完遂",
     period: "2026/5/2（両垢デビュー）〜 2026/6/24（Day 60）",
     risks: "【運用負荷】週15h超えでセナポストをAI下書き寄せ\n【フォロワー伸び悩み】投稿時間帯と切り口を1週間テスト変更\n【セナ垢独立化】ハル言及率60%下回ったらテーマ表を再設計",
-    comments: "",
   },
   kpi: {
     description: "60日・6ヶ月・1年・3年の4スパンでKPIを設定・追跡する管理プロジェクト。\n週次・月次レビューで実績を記録する。",
@@ -34,7 +31,6 @@ export const INITIAL_PROJECT_META: Record<string, ProjectMeta> = {
     kpiSummary: "週次レビュー：毎週日曜4hブロックの最後30分\n月次レビュー：Day 30（5/25）と Day 60（6/24）",
     period: "2026/4/26〜2029/4末",
     risks: "黄信号トリガー：週運用時間15h超 / 1記事PV≤30が3記事連続 / 連動引用RT実施率50%下回り",
-    comments: "",
   },
 }
 
@@ -47,77 +43,66 @@ export const INITIAL_GOAL_META: Record<string, GoalMeta> = {
     targetMetric: "3垢開設完了＋相互リンク設定 / スタンス記事1本公開 / 両垢デビュー（ハル3＋セナ3ポスト）",
     period: "Day 1-7（2026/4/26〜5/2）",
     notes: "GW初日（4/29）にセナ垢開設＋スタンス記事ドラフト前半まで進める。\nDay 7（5/2土）に両垢デビュー＋記事0公開。3垢の固定ポスト設定と相互リンクを必ず確認。",
-    comments: "",
   },
   phase2: {
     description: "GWを使ってNote 1を公開し、2アカウント連動運用を定着させる集中執筆フェーズ。",
     targetMetric: "Note 1公開（Day 11） / Note 2ドラフト完成 / 両垢連動引用RT定着",
     period: "Day 8-14（2026/5/3〜5/9）",
     notes: "GW（Day 8〜11）は16hの加速ブースト枠。Day 11（5/6水・振休）にNote 1公開。\nGW明けDay 12〜14でNote 2の企画・リサーチ・執筆まで進める。",
-    comments: "",
   },
   phase3: {
     description: "Note 2〜4を週次公開し、X2垢の平日6ポスト体制を最適化する公開リズム作りフェーズ。",
     targetMetric: "Note 2公開（D15）/ Note 3公開（D22）/ Note 4公開（D29）/ 週次Xテーマ表作成",
     period: "Day 15-28（2026/5/10〜5/23）",
     notes: "毎週日曜に翌週分のXポストテーマ表（6×7=42ポスト）を作成。\nDay 28（5/23土）に4週間の半月レビューを実施。",
-    comments: "",
   },
   phase4: {
     description: "Note 5〜6を公開しつつ、有料記事第1弾の章立てを確定する中盤レビュー＋有料化準備フェーズ。",
     targetMetric: "Note 5公開（D36）/ Note 6公開（D43）/ 有料記事章立て確定 / 30日レビュー実施",
     period: "Day 29-42（2026/5/24〜6/6）",
     notes: "Day 35（5/30）に有料記事第1弾「副業60日活動記」の章立て（5章程度）を確定。\nDay 42（6/6土）に30日レビューと次の30日の運用調整を実施。",
-    comments: "",
   },
   phase5: {
     description: "Note 7〜8を公開しながら有料記事のドラフトを集中して書き上げる後半加速フェーズ。",
     targetMetric: "Note 7公開（D50）/ Note 8公開（D57）/ 有料記事全章ドラフト完成＋全体推敲",
     period: "Day 43-56（2026/6/7〜6/20）",
     notes: "Day 57が「Note 8公開＋有料記事予告」の重要日。\n有料記事は章1〜5を分散して書き、Day 56に全体推敲を完了させる。",
-    comments: "",
   },
   phase6: {
     description: "60日間の活動を総括し、次フェーズへの引き継ぎを完成させる最終フェーズ。",
     targetMetric: "Note 8公開（D57）/ 60日レビュー実施（D59）/ 両X連投公開（D60）/ 有料記事公開準備完了",
     period: "Day 57-60（2026/6/21〜6/24）",
     notes: "Day 60（6/24水）に両Xスレッド連投で60日記念を公開。有料記事は翌週公開の予告まで。\nnoteの固定記事をスタンス記事から60日まとめ記事に切り替えるか検討。",
-    comments: "",
   },
   "notes-free": {
     description: "集客・ファン化・教育の3軸でNote無料記事8本を展開する。",
     targetMetric: "8本公開 / 1記事PV 100〜300 / スキ 5〜15 / 保存 1〜3",
     period: "2026/5/2〜6/21",
     notes: "AI×業務効率化（4本）・副業体験記（3本）・副業×AI（1本）＋スタンス記事（固定）の構成。\n毎記事末尾に「AI（セナ）と一緒に組み立てています」定型文＋両X垢リンクを設置。",
-    comments: "",
   },
   "notes-paid": {
     description: "初の有料記事「副業60日活動記 ¥980」。60日間の実体験を体系化したドキュメント。",
     targetMetric: "初回販売目標：10部以上 / 累計売上¥9,800以上",
     period: "2026/7月予定（Day 60以降）",
     notes: "章立て（5章）はDay 35までに確定。全体推敲はDay 56に完了。\n無料記事の読者が「課金して続きを読む価値がある」と感じる差分を点検する。",
-    comments: "",
   },
   "x-haru": {
     description: "ハル本人（人間として認識）が発信するNote発信源アカウント。1日3ポスト・です/ます調・温度低め。",
     targetMetric: "フォロワー 150〜250人（Day 60）/ Xインプレッション増加傾向",
     period: "2026/5/2（デビュー）〜",
     notes: "辛口はほぼ出さない（事実ベースの低温まで）。\nセナ垢への言及は登場人物として自然に。煽り系リプは無視。返信は低頻度。",
-    comments: "",
   },
   "x-sena": {
     description: "AIキャラ「セナ」が運用する拡散・誘導アカウント。ハル垢への引用RT・ツッコミが主な役割。",
     targetMetric: "フォロワー 150〜250人（Day 60）/ ハル言及率60%以上 / 連動RT実施率80%以上",
     period: "2026/5/2（デビュー）〜",
     notes: "3ポスト中2ポストにはハル言及が必須。辛口はOK（低〜中温まで）。\nAI否定派対応はL1〜L4プロトコルに従い、スタンス記事へ繰り返し誘導。",
-    comments: "",
   },
   "kpi-60d": {
     description: "60日後（2026/6/24）に達成すべき先行指標。信頼資産の構築が目的。",
     targetMetric: "Note9本 / Xフォロワー300〜500人 / Xポスト330本 / 連動RT80%以上",
     period: "〜 2026/6/24（Day 60）",
     notes: "【黄信号】累計フォロワー300以下＋PV合計500以下 → Day 90までに大幅見直し\n【順調ライン】フォロワー500以上＋PV合計2,000以上 → 予定通り有料記事Day 75公開",
-    comments: "",
     linkedProjectId: "roadmap",
   },
   "kpi-6m": {
@@ -125,7 +110,6 @@ export const INITIAL_GOAL_META: Record<string, GoalMeta> = {
     targetMetric: "Note20〜25本（有料2〜3本）/ フォロワー1,500〜2,000人 / 固定読者100名 / 月収¥10,000〜30,000",
     period: "〜 2026/10末",
     notes: "初の有料note販売開始、固定読者100名獲得がマイルストーン。",
-    comments: "",
     linkedProjectId: "roadmap",
   },
   "kpi-1y": {
@@ -133,7 +117,6 @@ export const INITIAL_GOAL_META: Record<string, GoalMeta> = {
     targetMetric: "Note40〜50本（有料5〜7本）/ フォロワー3,500〜4,500人 / 月収¥30,000〜80,000",
     period: "〜 2027/4末",
     notes: "メンバーシップの準備・仮ローンチ予告がこのフェーズのゴール。",
-    comments: "",
     linkedProjectId: "roadmap",
   },
   "kpi-3y": {
@@ -141,7 +124,6 @@ export const INITIAL_GOAL_META: Record<string, GoalMeta> = {
     targetMetric: "Note150本以上 / フォロワー25,000〜35,000人 / 月収¥300,000〜500,000",
     period: "〜 2029/4末",
     notes: "メンバーシップ50名・四半期総集編¥3,000〜5,000が成熟期の目安。",
-    comments: "",
     linkedProjectId: "roadmap",
   },
 }

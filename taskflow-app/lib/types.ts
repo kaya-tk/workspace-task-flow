@@ -1,4 +1,4 @@
-export type Status = "todo" | "inprogress" | "done"
+export type Status = "todo" | "inprogress" | "done" | "hold"
 
 export type RecurrenceType = "weekly" | "monthly-nth"
 
@@ -16,6 +16,7 @@ export interface Task {
   status: Status
   startDate?: string
   dueDate?: string
+  labels?: string[]
   order: number
   day?: number          // Day number in the roadmap
   recurrence?: Recurrence  // 繰り返し設定
@@ -48,7 +49,6 @@ export interface ProjectMeta {
   kpiSummary: string
   period: string
   risks: string
-  comments: string
 }
 
 export interface GoalMeta {
@@ -56,7 +56,6 @@ export interface GoalMeta {
   targetMetric: string
   period: string
   notes: string
-  comments: string
   linkedProjectId?: string
 }
 
@@ -76,6 +75,7 @@ export interface TaskDetail {
   id: string
   title: string
   status: Status
+  startDate: string
   dueDate: string
   labels: string[]
   estimate: string

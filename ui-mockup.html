@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskFlow — UI Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0f0f10;
+    color: #e2e2e4;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  /* ===================== PANE COMMON ===================== */
+  .pane {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #1e1e22;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .pane-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #1e1e22;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .pane-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b6b78;
+  }
+
+  .pane-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 0;
+  }
+
+  .pane-body::-webkit-scrollbar { width: 4px; }
+  .pane-body::-webkit-scrollbar-track { background: transparent; }
+  .pane-body::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 4px; }
+
+  .btn-icon {
+    width: 24px; height: 24px;
+    border: none; background: none;
+    color: #6b6b78; cursor: pointer;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: background 0.1s, color 0.1s;
+  }
+  .btn-icon:hover { background: #1e1e24; color: #e2e2e4; }
+
+  /* ===================== PANE 1: PROJECTS ===================== */
+  #pane-projects {
+    width: 200px;
+    flex-shrink: 0;
+    background: #0d0d0f;
+  }
+
+  .workspace-header {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #1e1e22;
+    flex-shrink: 0;
+  }
+
+  .workspace-avatar {
+    width: 24px; height: 24px;
+    background: linear-gradient(135deg, #7c6fcd, #5b50a3);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  .workspace-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2e2e4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .section-label {
+    padding: 16px 16px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #44444d;
+  }
+
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.1s;
+    color: #9898a6;
+    user-select: none;
+  }
+
+  .project-item:hover { background: #141418; color: #c8c8d4; }
+  .project-item.active { background: #161620; color: #e2e2e4; }
+
+  .project-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .project-item-name {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .count-badge {
+    margin-left: auto;
+    font-size: 10px;
+    color: #44444d;
+    font-weight: 500;
+  }
+
+  /* ===================== PANE 2: GOALS ===================== */
+  #pane-goals {
+    width: 220px;
+    flex-shrink: 0;
+    background: #0f0f13;
+  }
+
+  .goal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.1s;
+    color: #9898a6;
+    user-select: none;
+    border-left: 2px solid transparent;
+  }
+
+  .goal-item:hover { background: #141418; color: #c8c8d4; }
+  .goal-item.active {
+    background: #13131a;
+    color: #e2e2e4;
+    border-left-color: #7c6fcd;
+  }
+
+  .goal-icon {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+  }
+
+  .goal-info { flex: 1; min-width: 0; }
+
+  .goal-name {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+
+  .goal-meta {
+    font-size: 10px;
+    color: #44444d;
+    margin-top: 2px;
+  }
+
+  .goal-progress {
+    height: 2px;
+    background: #1e1e26;
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .goal-progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: #7c6fcd;
+  }
+
+  /* ===================== PANE 3: TREE ===================== */
+  #pane-issues {
+    width: 360px;
+    flex-shrink: 0;
+    background: #0f0f12;
+  }
+
+  /* ---- tree row ---- */
+  .tree-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 30px;
+    cursor: pointer;
+    user-select: none;
+    border-left: 2px solid transparent;
+    transition: background 0.08s;
+  }
+  .tree-row:hover { background: #141418; }
+  .tree-row:hover .row-actions { opacity: 1; }
+  .tree-row.active {
+    background: #13131c;
+    border-left-color: #7c6fcd;
+  }
+  .tree-row.active .tree-title { color: #e2e2e4; }
+
+  /* drag handle */
+  .drag-handle {
+    width: 14px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2a2a34;
+    font-size: 10px;
+    opacity: 0;
+    cursor: grab;
+    margin-left: 6px;
+  }
+  .tree-row:hover .drag-handle { opacity: 1; }
+
+  /* indent spacer: each level = 16px */
+  .tree-indent {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* vertical guide lines */
+  .tree-indent::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: -15px;
+    bottom: -15px;
+    width: 1px;
+    background: #1e1e26;
+  }
+  .tree-indent.last::before { bottom: 50%; }
+
+  /* horizontal connector */
+  .tree-indent::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    width: 9px;
+    height: 1px;
+    background: #1e1e26;
+  }
+
+  /* expand/collapse toggle */
+  .tree-toggle {
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #44444d;
+    font-size: 9px;
+    border-radius: 3px;
+    transition: color 0.1s, background 0.1s;
+    margin-right: 2px;
+  }
+  .tree-toggle:hover { background: #1e1e26; color: #9898a6; }
+  .tree-toggle.leaf { color: transparent; pointer-events: none; }
+
+  /* status icon */
+  .tree-status {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    margin-right: 6px;
+    position: relative;
+  }
+  .tree-status.backlog { border: 1.5px dashed #383848; }
+  .tree-status.todo    { border: 1.5px solid #48485e; }
+  .tree-status.inprogress {
+    border: 1.5px solid #f59e0b;
+    overflow: hidden;
+  }
+  .tree-status.inprogress::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 50%;
+    background: #f59e0b;
+    border-radius: 0 0 8px 8px;
+  }
+  .tree-status.done {
+    background: #22c55e;
+    border: 1.5px solid #22c55e;
+  }
+  .tree-status.done::after {
+    content: '✓';
+    color: #0a0a0a;
+    font-size: 8px;
+    font-weight: 800;
+  }
+
+  /* title */
+  .tree-title {
+    flex: 1;
+    font-size: 12px;
+    color: #b8b8c4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+  }
+  .tree-title.done-text { color: #44444d; text-decoration: line-through; }
+
+  /* row meta (due / priority) */
+  .tree-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+  .tree-due {
+    font-size: 10px;
+    color: #38383e;
+  }
+  .tree-due.overdue { color: #f87171; }
+
+  .tree-pri {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .pri-high   { background: #f87171; }
+  .pri-medium { background: #f59e0b; }
+  .pri-low    { background: #4ade80; }
+
+  /* hover action buttons */
+  .row-actions {
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    flex-shrink: 0;
+    margin-right: 6px;
+    transition: opacity 0.1s;
+  }
+  .row-act-btn {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; background: none;
+    color: #44444d; font-size: 12px;
+    cursor: pointer; border-radius: 3px;
+    transition: background 0.1s, color 0.1s;
+  }
+  .row-act-btn:hover { background: #1e1e26; color: #9898a6; }
+
+  /* children container */
+  .tree-children {
+    overflow: hidden;
+    transition: max-height 0.18s ease;
+  }
+  .tree-children.collapsed { max-height: 0 !important; }
+
+  /* order number */
+  .tree-order {
+    font-size: 9px;
+    color: #2a2a34;
+    font-family: 'SF Mono', monospace;
+    width: 18px;
+    text-align: right;
+    flex-shrink: 0;
+    margin-right: 4px;
+  }
+
+  /* add child inline */
+  .add-child-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    cursor: pointer;
+    color: #2e2e3a;
+    font-size: 11px;
+    transition: color 0.1s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tree-children:hover .add-child-row,
+  .tree-row:hover + .tree-children .add-child-row { opacity: 1; pointer-events: auto; }
+  .add-child-row:hover { color: #7c6fcd; }
+
+  /* section label */
+  .tree-section {
+    padding: 14px 16px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #33333d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* tag pills (compact) */
+  .tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .tag.high   { background: #3a1a1a; color: #f87171; }
+  .tag.medium { background: #2a1f0e; color: #f59e0b; }
+  .tag.low    { background: #0e2018; color: #4ade80; }
+  .tag.label  { background: #1a1a2e; color: #818cf8; }
+
+  /* legacy - keep for detail pane */
+  .issue-due.overdue { color: #f87171; }
+
+  /* ===================== PANE 4: DETAIL ===================== */
+  #pane-detail {
+    flex: 1;
+    background: #0c0c0f;
+    border-right: none;
+  }
+
+  .detail-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #1a1a20;
+    flex-shrink: 0;
+  }
+
+  .detail-breadcrumb {
+    font-size: 11px;
+    color: #44444d;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .detail-breadcrumb span { color: #3a3a48; }
+
+  .detail-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e8e8f0;
+    line-height: 1.4;
+    outline: none;
+  }
+
+  .detail-title[contenteditable]:empty::before {
+    content: 'タイトルを入力...';
+    color: #3a3a48;
+  }
+
+  .detail-body {
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+  }
+
+  .detail-body::-webkit-scrollbar { width: 4px; }
+  .detail-body::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 4px; }
+
+  .detail-main {
+    flex: 1;
+    padding: 20px 24px;
+    overflow-y: auto;
+  }
+
+  /* Properties */
+  .prop-section { margin-bottom: 24px; }
+
+  .prop-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #3a3a48;
+    margin-bottom: 10px;
+  }
+
+  .prop-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #141418;
+  }
+
+  .prop-label {
+    font-size: 11px;
+    color: #5a5a68;
+  }
+
+  .prop-value {
+    font-size: 11px;
+    color: #9898a6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.1s;
+  }
+
+  .prop-value:hover { background: #1a1a22; color: #c8c8d4; }
+
+  .priority-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  .priority-high { background: #f87171; }
+  .priority-medium { background: #f59e0b; }
+  .priority-low { background: #4ade80; }
+  .priority-none { background: #3a3a48; }
+
+  /* Description */
+  .section-heading {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #3a3a48;
+    margin-bottom: 10px;
+  }
+
+  .description-area {
+    font-size: 13px;
+    color: #7878888;
+    line-height: 1.7;
+    color: #9898a6;
+    min-height: 80px;
+    outline: none;
+    cursor: text;
+  }
+
+  .description-area:empty::before {
+    content: 'メモを追加...';
+    color: #2e2e38;
+  }
+
+  /* Comments */
+  .comment-area { margin-top: 24px; }
+
+  .comment-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .comment-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .comment-bubble {
+    flex: 1;
+    background: #141418;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .comment-author { font-size: 11px; font-weight: 600; color: #c8c8d4; }
+  .comment-time { font-size: 10px; color: #44444d; }
+  .comment-text { font-size: 12px; color: #9898a6; line-height: 1.5; }
+
+  .comment-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+
+  .comment-input {
+    flex: 1;
+    background: #141418;
+    border: 1px solid #1e1e26;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #9898a6;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+
+  .comment-input::placeholder { color: #2e2e38; }
+  .comment-input:focus { border-color: #7c6fcd; color: #c8c8d4; }
+
+  .btn-send {
+    background: #7c6fcd;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.1s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  .btn-send:hover { background: #6b5fbe; }
+
+  /* Status pill */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .status-backlog { background: #1a1a22; color: #6b6b78; }
+  .status-todo { background: #1a1a26; color: #818cf8; }
+  .status-inprogress { background: #211a0e; color: #f59e0b; }
+  .status-done { background: #0e2018; color: #4ade80; }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #2e2e38;
+    gap: 8px;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .empty-state-icon { font-size: 32px; opacity: 0.4; }
+  .empty-state-text { font-size: 13px; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: #1a1a20;
+    margin: 16px 0;
+  }
+
+  /* Add buttons */
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #44444d;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+    transition: color 0.1s;
+    border-radius: 4px;
+  }
+
+  .add-btn:hover { color: #7c6fcd; background: #13131a; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ===== PANE 1: PROJECTS ===== -->
+<div class="pane" id="pane-projects">
+  <div class="workspace-header">
+    <div class="workspace-avatar">T</div>
+    <div class="workspace-name">TaskFlow</div>
+  </div>
+
+  <div class="pane-body">
+    <div class="section-label">プロジェクト</div>
+
+    <div class="project-item active" onclick="selectProject(this, 'youtube')">
+      <div class="project-dot" style="background:#a855f7"></div>
+      <div class="project-item-name">Youtube運営</div>
+      <div class="count-badge">4</div>
+    </div>
+
+    <div class="project-item" onclick="selectProject(this, 'business')">
+      <div class="project-dot" style="background:#3b82f6"></div>
+      <div class="project-item-name">副業ビジネス</div>
+      <div class="count-badge">7</div>
+    </div>
+
+    <div class="project-item" onclick="selectProject(this, 'learning')">
+      <div class="project-dot" style="background:#22c55e"></div>
+      <div class="project-item-name">スキルアップ</div>
+      <div class="count-badge">3</div>
+    </div>
+
+    <div class="project-item" onclick="selectProject(this, 'life')">
+      <div class="project-dot" style="background:#f59e0b"></div>
+      <div class="project-item-name">生活改善</div>
+      <div class="count-badge">2</div>
+    </div>
+
+    <button class="add-btn" style="margin-top: 8px; padding-left: 16px;">＋ プロジェクトを追加</button>
+  </div>
+</div>
+
+<!-- ===== PANE 2: GOALS ===== -->
+<div class="pane" id="pane-goals">
+  <div class="pane-header">
+    <span class="pane-title">ゴール</span>
+    <button class="btn-icon" title="追加">＋</button>
+  </div>
+
+  <div class="pane-body" id="goals-body">
+    <!-- youtube goals -->
+    <div data-project="youtube">
+      <div class="goal-item active" onclick="selectGoal(this, 'g1')">
+        <div class="goal-icon" style="background:#2d1f4a; color:#a855f7;">◎</div>
+        <div class="goal-info">
+          <div class="goal-name">チャンネル登録1000人達成</div>
+          <div class="goal-meta">3 / 8 タスク完了</div>
+          <div class="goal-progress"><div class="goal-progress-bar" style="width:37%;background:#a855f7"></div></div>
+        </div>
+      </div>
+
+      <div class="goal-item" onclick="selectGoal(this, 'g2')">
+        <div class="goal-icon" style="background:#2d1f4a; color:#a855f7;">◎</div>
+        <div class="goal-info">
+          <div class="goal-name">月10本動画投稿</div>
+          <div class="goal-meta">6 / 10 タスク完了</div>
+          <div class="goal-progress"><div class="goal-progress-bar" style="width:60%;background:#a855f7"></div></div>
+        </div>
+      </div>
+
+      <div class="goal-item" onclick="selectGoal(this, 'g3')">
+        <div class="goal-icon" style="background:#2d1f4a; color:#a855f7;">◎</div>
+        <div class="goal-info">
+          <div class="goal-name">収益化申請を通す</div>
+          <div class="goal-meta">0 / 5 タスク完了</div>
+          <div class="goal-progress"><div class="goal-progress-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANE 3: TREE ===== -->
+<div class="pane" id="pane-issues">
+  <div class="pane-header">
+    <span class="pane-title" id="issues-pane-title">チャンネル登録1000人達成</span>
+    <div style="display:flex;gap:4px;">
+      <button class="btn-icon" title="展開/折畳み" onclick="toggleAll()">⇕</button>
+      <button class="btn-icon" title="タスク追加">＋</button>
+    </div>
+  </div>
+
+  <div class="pane-body" id="issues-body" style="padding:4px 0 16px;">
+
+    <!-- ========= TREE ROOT ========= -->
+    <div id="task-tree">
+
+      <!-- 1. チャンネル戦略を固める [done] -->
+      <div class="tree-node" data-id="t1">
+        <div class="tree-row" onclick="selectTask(this,'t1')">
+          <span class="drag-handle">⠿</span>
+          <span class="tree-order">1</span>
+          <span class="tree-toggle" onclick="toggleNode(event,'t1')">▾</span>
+          <span class="tree-status done"></span>
+          <span class="tree-title done-text">チャンネル戦略を固める</span>
+          <div class="row-actions">
+            <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t1')">＋</button>
+          </div>
+          <div class="tree-meta">
+            <span class="tree-due">6/10</span>
+          </div>
+        </div>
+        <div class="tree-children" id="ch-t1" style="max-height:200px;">
+
+          <!-- 1-1 -->
+          <div class="tree-node" data-id="t1-1">
+            <div class="tree-row" onclick="selectTask(this,'t1-1')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent" style="width:28px;"></div>
+              <span class="tree-order">1</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status done"></span>
+              <span class="tree-title done-text">ターゲット視聴者を定義する</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t1-1')">＋</button>
+              </div>
+              <div class="tree-meta"><span class="tree-due">6/5</span></div>
+            </div>
+          </div>
+
+          <!-- 1-2 -->
+          <div class="tree-node" data-id="t1-2">
+            <div class="tree-row" onclick="selectTask(this,'t1-2')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent" style="width:28px;"></div>
+              <span class="tree-order">2</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status done"></span>
+              <span class="tree-title done-text">チャンネルコンセプトを決める</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t1-2')">＋</button>
+              </div>
+              <div class="tree-meta"><span class="tree-due">6/7</span></div>
+            </div>
+          </div>
+
+          <!-- 1-3 -->
+          <div class="tree-node" data-id="t1-3">
+            <div class="tree-row" onclick="selectTask(this,'t1-3')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent last" style="width:28px;"></div>
+              <span class="tree-order">3</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status done"></span>
+              <span class="tree-title done-text">Youtubeアカウントを作成する</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t1-3')">＋</button>
+              </div>
+              <div class="tree-meta"><span class="tree-due">6/10</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. チャンネル外観を整える [inprogress] -->
+      <div class="tree-node" data-id="t2">
+        <div class="tree-row" onclick="selectTask(this,'t2')">
+          <span class="drag-handle">⠿</span>
+          <span class="tree-order">2</span>
+          <span class="tree-toggle" onclick="toggleNode(event,'t2')">▾</span>
+          <span class="tree-status inprogress"></span>
+          <span class="tree-title">チャンネル外観を整える</span>
+          <div class="row-actions">
+            <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2')">＋</button>
+          </div>
+          <div class="tree-meta">
+            <span class="tree-pri pri-medium"></span>
+            <span class="tree-due">6/25</span>
+          </div>
+        </div>
+        <div class="tree-children" id="ch-t2" style="max-height:600px;">
+
+          <!-- 2-1 -->
+          <div class="tree-node" data-id="t2-1">
+            <div class="tree-row" onclick="selectTask(this,'t2-1')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent" style="width:28px;"></div>
+              <span class="tree-order">1</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status inprogress"></span>
+              <span class="tree-title">チャンネルタイトル案を10個出す</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2-1')">＋</button>
+              </div>
+              <div class="tree-meta">
+                <span class="tree-pri pri-medium"></span>
+                <span class="tree-due">6/22</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2-2 サムネイル (has children) -->
+          <div class="tree-node" data-id="t2-2">
+            <div class="tree-row active" onclick="selectTask(this,'t2-2')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent" style="width:28px;"></div>
+              <span class="tree-order">2</span>
+              <span class="tree-toggle" onclick="toggleNode(event,'t2-2')">▾</span>
+              <span class="tree-status todo"></span>
+              <span class="tree-title">サムネイルデザインの方向性を決める</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2-2')">＋</button>
+              </div>
+              <div class="tree-meta">
+                <span class="tree-pri pri-medium"></span>
+                <span class="tree-due">6/25</span>
+              </div>
+            </div>
+            <div class="tree-children" id="ch-t2-2" style="max-height:200px;">
+
+              <!-- 2-2-1 -->
+              <div class="tree-node" data-id="t2-2-1">
+                <div class="tree-row" onclick="selectTask(this,'t2-2-1')">
+                  <span class="drag-handle">⠿</span>
+                  <div class="tree-indent" style="width:28px;"></div>
+                  <div class="tree-indent" style="width:28px;"></div>
+                  <span class="tree-order">1</span>
+                  <span class="tree-toggle leaf">▾</span>
+                  <span class="tree-status inprogress"></span>
+                  <span class="tree-title">競合チャンネル10件を調査する</span>
+                  <div class="row-actions">
+                    <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2-2-1')">＋</button>
+                  </div>
+                  <div class="tree-meta">
+                    <span class="tree-pri pri-high"></span>
+                    <span class="tree-due overdue">6/18</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2-2-2 -->
+              <div class="tree-node" data-id="t2-2-2">
+                <div class="tree-row" onclick="selectTask(this,'t2-2-2')">
+                  <span class="drag-handle">⠿</span>
+                  <div class="tree-indent last" style="width:28px;"></div>
+                  <div class="tree-indent last" style="width:28px;"></div>
+                  <span class="tree-order">2</span>
+                  <span class="tree-toggle leaf">▾</span>
+                  <span class="tree-status todo"></span>
+                  <span class="tree-title">デザインパターンを3案作成する</span>
+                  <div class="row-actions">
+                    <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2-2-2')">＋</button>
+                  </div>
+                  <div class="tree-meta">
+                    <span class="tree-pri pri-medium"></span>
+                    <span class="tree-due">6/24</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 2-3 -->
+          <div class="tree-node" data-id="t2-3">
+            <div class="tree-row" onclick="selectTask(this,'t2-3')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent last" style="width:28px;"></div>
+              <span class="tree-order">3</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status todo"></span>
+              <span class="tree-title">チャンネルアート・アイコンを作る</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t2-3')">＋</button>
+              </div>
+              <div class="tree-meta">
+                <span class="tree-pri pri-low"></span>
+                <span class="tree-due">6/27</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 3. コンテンツ計画を立てる [todo] -->
+      <div class="tree-node" data-id="t3">
+        <div class="tree-row" onclick="selectTask(this,'t3')">
+          <span class="drag-handle">⠿</span>
+          <span class="tree-order">3</span>
+          <span class="tree-toggle" onclick="toggleNode(event,'t3')">▾</span>
+          <span class="tree-status todo"></span>
+          <span class="tree-title">コンテンツ計画を立てる</span>
+          <div class="row-actions">
+            <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t3')">＋</button>
+          </div>
+          <div class="tree-meta">
+            <span class="tree-pri pri-high"></span>
+            <span class="tree-due">6/30</span>
+          </div>
+        </div>
+        <div class="tree-children" id="ch-t3" style="max-height:300px;">
+
+          <!-- 3-1 -->
+          <div class="tree-node" data-id="t3-1">
+            <div class="tree-row" onclick="selectTask(this,'t3-1')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent" style="width:28px;"></div>
+              <span class="tree-order">1</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status backlog"></span>
+              <span class="tree-title">投稿頻度・曜日を決定する</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t3-1')">＋</button>
+              </div>
+              <div class="tree-meta">
+                <span class="tree-pri pri-low"></span>
+                <span class="tree-due">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3-2 -->
+          <div class="tree-node" data-id="t3-2">
+            <div class="tree-row" onclick="selectTask(this,'t3-2')">
+              <span class="drag-handle">⠿</span>
+              <div class="tree-indent last" style="width:28px;"></div>
+              <span class="tree-order">2</span>
+              <span class="tree-toggle leaf">▾</span>
+              <span class="tree-status todo"></span>
+              <span class="tree-title">初回投稿の台本を書く</span>
+              <div class="row-actions">
+                <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'t3-2')">＋</button>
+              </div>
+              <div class="tree-meta">
+                <span class="tree-pri pri-high"></span>
+                <span class="tree-due">6/28</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /task-tree -->
+
+    <button class="add-btn" style="margin: 6px 16px; padding-left: 4px;" onclick="addRootTask()">＋ 親タスクを追加</button>
+  </div>
+</div>
+
+<!-- ===== PANE 4: DETAIL ===== -->
+<div class="pane" id="pane-detail">
+  <div class="detail-header">
+    <div class="detail-breadcrumb">
+      Youtube運営 <span>›</span> チャンネル登録1000人達成 <span>›</span> PRJ-10
+    </div>
+    <div class="detail-title" contenteditable="true">サムネイルデザインの方向性を決める</div>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-main">
+
+      <!-- Properties -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px;">
+        <span class="status-pill status-todo">○ 未着手</span>
+        <span class="prop-value" style="background:#1a1a22; border-radius:4px; padding:3px 8px; font-size:11px;">
+          <span class="priority-dot priority-medium"></span>中
+        </span>
+        <span class="prop-value" style="background:#1a1a22; border-radius:4px; padding:3px 8px; font-size:11px;">📅 6月25日</span>
+        <span class="prop-value" style="background:#1a1a22; border-radius:4px; padding:3px 8px; font-size:11px;">👤 Himo</span>
+        <span class="prop-value" style="background:#1a1a22; border-radius:4px; padding:3px 8px; font-size:11px;">🏷 デザイン</span>
+        <span class="prop-value" style="background:#1a1a22; border-radius:4px; padding:3px 8px; font-size:11px;">⏱ 2h</span>
+      </div>
+
+      <div class="prop-row" style="margin-bottom:16px;">
+        <span class="prop-label">ゴール</span>
+        <span style="font-size:11px; color:#a855f7;">◎ チャンネル登録1000人達成</span>
+      </div>
+
+      <div class="prop-row" style="margin-bottom:20px;">
+        <span class="prop-label">関連タスク</span>
+        <span style="font-size:11px; color:#5a5a68;">↗ PRJ-12 競合チャンネル調査</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Memo -->
+      <div class="section-heading">メモ / 説明</div>
+      <div class="description-area" contenteditable="true">
+        競合チャンネルのサムネイルを参考に、自チャンネルの方向性を3パターン作成する。文字入りテンプレート・顔出しアリなし・カラーパレットの3軸で検討。
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Comments -->
+      <div class="section-heading">コメント</div>
+      <div class="comment-area">
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#7c6fcd;">H</div>
+          <div class="comment-bubble">
+            <div class="comment-meta">
+              <span class="comment-author">Himo</span>
+              <span class="comment-time">2日前</span>
+            </div>
+            <div class="comment-text">
+              Canvaで3パターン作ってみた。顔出しなしの方がクリック率良さそうな気がする。競合調査のタスクと合わせて見直したい。
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#3b82f6;">A</div>
+          <div class="comment-bubble">
+            <div class="comment-meta">
+              <span class="comment-author">AI</span>
+              <span class="comment-time">1日前</span>
+            </div>
+            <div class="comment-text">
+              登録者数の多いチャンネルを見ると、タイトルを大きく・コントラスト強め・顔と文字の組み合わせが王道です。まずABテスト前提で2パターン準備するのがおすすめです。
+            </div>
+          </div>
+        </div>
+
+        <div class="comment-input-row">
+          <textarea class="comment-input" rows="2" placeholder="コメントを追加..."></textarea>
+          <button class="btn-send">送信</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div style="font-size: 10px; color: #33333d; line-height: 1.7; padding-bottom: 24px;">
+        <div>作成: 2025/06/18</div>
+        <div>更新: 2025/06/20</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== Project select =====
+  function selectProject(el) {
+    document.querySelectorAll('.project-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ===== Goal select =====
+  function selectGoal(el) {
+    document.querySelectorAll('.goal-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('issues-pane-title').textContent = el.querySelector('.goal-name').textContent;
+  }
+
+  // ===== Tree: select task row =====
+  function selectTask(el, id) {
+    document.querySelectorAll('.tree-row').forEach(r => r.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ===== Tree: toggle collapse =====
+  function toggleNode(e, id) {
+    e.stopPropagation();
+    const children = document.getElementById('ch-' + id);
+    if (!children) return;
+    const toggle = e.currentTarget;
+    const isOpen = !children.classList.contains('collapsed');
+    if (isOpen) {
+      children.classList.add('collapsed');
+      toggle.textContent = '▸';
+    } else {
+      children.classList.remove('collapsed');
+      toggle.textContent = '▾';
+    }
+  }
+
+  // ===== Tree: toggle all =====
+  let allOpen = true;
+  function toggleAll() {
+    allOpen = !allOpen;
+    document.querySelectorAll('.tree-children').forEach(c => {
+      if (allOpen) c.classList.remove('collapsed');
+      else c.classList.add('collapsed');
+    });
+    document.querySelectorAll('.tree-toggle:not(.leaf)').forEach(t => {
+      t.textContent = allOpen ? '▾' : '▸';
+    });
+  }
+
+  // ===== Tree: add child task =====
+  let taskCounter = 20;
+  function addChild(e, parentId) {
+    e.stopPropagation();
+    const childrenId = 'ch-' + parentId;
+    let container = document.getElementById(childrenId);
+
+    if (!container) {
+      // make parent a parent node
+      const parentRow = e.currentTarget.closest('.tree-row');
+      const toggle = parentRow.querySelector('.tree-toggle');
+      toggle.classList.remove('leaf');
+      toggle.textContent = '▾';
+      toggle.setAttribute('onclick', `toggleNode(event,'${parentId}')`);
+
+      container = document.createElement('div');
+      container.className = 'tree-children';
+      container.id = childrenId;
+      container.style.maxHeight = '400px';
+      parentRow.parentElement.appendChild(container);
+    }
+
+    // count existing children
+    const existingCount = container.querySelectorAll(':scope > .tree-node').length + 1;
+    const newId = parentId + '-' + taskCounter++;
+
+    const newNode = document.createElement('div');
+    newNode.className = 'tree-node';
+    newNode.dataset.id = newId;
+    newNode.innerHTML = `
+      <div class="tree-row" onclick="selectTask(this,'${newId}')">
+        <span class="drag-handle">⠿</span>
+        <div class="tree-indent last" style="width:28px;"></div>
+        <span class="tree-order">${existingCount}</span>
+        <span class="tree-toggle leaf">▾</span>
+        <span class="tree-status backlog"></span>
+        <span class="tree-title" contenteditable="true" style="outline:none; color:#9898a6;"
+          onblur="if(!this.textContent.trim())this.textContent='新しいタスク';"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">新しいタスク</span>
+        <div class="row-actions">
+          <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'${newId}')">＋</button>
+        </div>
+        <div class="tree-meta"><span class="tree-due">—</span></div>
+      </div>
+    `;
+    container.appendChild(newNode);
+
+    // ensure open
+    container.classList.remove('collapsed');
+
+    // focus title
+    setTimeout(() => {
+      const title = newNode.querySelector('.tree-title');
+      title.focus();
+      const range = document.createRange();
+      range.selectNodeContents(title);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    }, 50);
+  }
+
+  // ===== Tree: add root task =====
+  function addRootTask() {
+    const tree = document.getElementById('task-tree');
+    const rootCount = tree.querySelectorAll(':scope > .tree-node').length + 1;
+    const newId = 'root-' + taskCounter++;
+
+    const newNode = document.createElement('div');
+    newNode.className = 'tree-node';
+    newNode.dataset.id = newId;
+    newNode.innerHTML = `
+      <div class="tree-row" onclick="selectTask(this,'${newId}')">
+        <span class="drag-handle">⠿</span>
+        <span class="tree-order">${rootCount}</span>
+        <span class="tree-toggle leaf">▾</span>
+        <span class="tree-status backlog"></span>
+        <span class="tree-title" contenteditable="true" style="outline:none; color:#9898a6;"
+          onblur="if(!this.textContent.trim())this.textContent='新しい親タスク';"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">新しい親タスク</span>
+        <div class="row-actions">
+          <button class="row-act-btn" title="子タスク追加" onclick="addChild(event,'${newId}')">＋</button>
+        </div>
+        <div class="tree-meta"><span class="tree-due">—</span></div>
+      </div>
+    `;
+    tree.appendChild(newNode);
+
+    setTimeout(() => {
+      const title = newNode.querySelector('.tree-title');
+      title.focus();
+      const range = document.createRange();
+      range.selectNodeContents(title);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    }, 50);
+  }
+
+  // ===== Comment send =====
+  document.querySelector('.btn-send').addEventListener('click', function() {
+    const textarea = document.querySelector('.comment-input');
+    const text = textarea.value.trim();
+    if (!text) return;
+    const commentArea = document.querySelector('.comment-area');
+    const inputRow = document.querySelector('.comment-input-row');
+    const newComment = document.createElement('div');
+    newComment.className = 'comment-item';
+    newComment.innerHTML = `
+      <div class="comment-avatar" style="background:#7c6fcd;">H</div>
+      <div class="comment-bubble">
+        <div class="comment-meta">
+          <span class="comment-author">Himo</span>
+          <span class="comment-time">たった今</span>
+        </div>
+        <div class="comment-text">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      </div>
+    `;
+    commentArea.insertBefore(newComment, inputRow);
+    textarea.value = '';
+  });
+
+  document.querySelector('.comment-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.querySelector('.btn-send').click();
+    }
+  });
+</script>
+</body>
+</html>

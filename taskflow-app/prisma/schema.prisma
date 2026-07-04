@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Project
+// ─────────────────────────────────────────────
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  color       String   @default("#66cdaa")
+  description String?
+  targetOutcome String?  @map("target_outcome")
+  risks       String?
+  userId      String?  @map("user_id") // 将来の認証対応用（予約）
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  goals       Goal[]
+  memos       ProjectMemo[]
+
+  @@map("projects")
+}
+
+model ProjectMemo {
+  id        String   @id @default(cuid())
+  text      String
+  projectId String   @map("project_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_memos")
+}
+
+// ─────────────────────────────────────────────
+// Goal
+// ─────────────────────────────────────────────
+model Goal {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  targetMetric  String?  @map("target_metric")
+  risks         String?
+  order         Int      @default(0)
+  projectId     String   @map("project_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  project       Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  categories    Category[]
+  memos         GoalMemo[]
+
+  @@map("goals")
+}
+
+model GoalMemo {
+  id        String   @id @default(cuid())
+  text      String
+  goalId    String   @map("goal_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@map("goal_memos")
+}
+
+// ─────────────────────────────────────────────
+// Category
+// ─────────────────────────────────────────────
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int      @default(0)
+  goalId    String   @map("goal_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  tasks     Task[]
+
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// Task
+// ─────────────────────────────────────────────
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  status      TaskStatus @default(TODO)
+  order       Int       @default(0)
+  startDate   DateTime? @map("start_date")
+  dueDate     DateTime? @map("due_date")
+  estimate    String?   // 工数（例: "2h", "1d"）
+  labels      String[]  @default([]) // JSONカラム (PostgreSQL text[])
+  categoryId  String    @map("category_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  workMemos   TaskWorkMemo[]
+
+  @@map("tasks")
+}
+
+model TaskWorkMemo {
+  id        String   @id @default(cuid())
+  text      String
+  taskId    String   @map("task_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("task_work_memos")
+}
+
+enum TaskStatus {
+  TODO
+  INPROGRESS
+  DONE
+  HOLD
+
+  @@map("task_status")
+}
