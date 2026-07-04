@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 const STATUS_CYCLE: Record<Status, Status> = {
   todo: "inprogress",
   inprogress: "done",
-  done: "todo",
+  done: "hold",
   hold: "todo",
 }
 
@@ -90,7 +90,7 @@ export function TaskTreeNode({
     <div className="relative group/task">
       <div
         className={cn(
-          "flex items-center gap-2 rounded-lg cursor-pointer transition-colors border select-none py-2.5 pr-2 mb-[5px]",
+          "flex items-center gap-2 rounded-lg cursor-pointer transition-colors border select-none py-2.5 pr-2 mb-[6px]",
           isSelected
             ? "bg-accent border-primary/30"
             : "border-transparent hover:bg-muted"
@@ -103,9 +103,11 @@ export function TaskTreeNode({
           {from ? (
             <span className={cn(
               "text-[12px] font-semibold tabular-nums rounded px-1 py-0.5 leading-none",
-              isStartPastOrToday
-                ? "text-blue-600 bg-blue-50 border border-blue-200"
-                : "text-muted-foreground bg-muted border border-border"
+              isDone
+                ? "text-muted-foreground/40 bg-muted border border-border line-through"
+                : isStartPastOrToday
+                  ? "text-blue-600 bg-blue-50 border border-blue-200"
+                  : "text-muted-foreground bg-muted border border-border"
             )}>
               {from}
             </span>
@@ -134,7 +136,7 @@ export function TaskTreeNode({
             className={cn(
               "flex-1 text-sm truncate",
               isDone
-                ? "line-through text-muted-foreground"
+                ? "line-through text-muted-foreground/40"
                 : isSelected
                   ? "text-accent-foreground font-medium"
                   : "text-foreground"
@@ -169,9 +171,11 @@ export function TaskTreeNode({
           {to ? (
             <span className={cn(
               "text-[12px] font-semibold tabular-nums rounded px-1 py-0.5 leading-none",
-              isDuePastOrToday
-                ? "text-red-600 bg-red-50 border border-red-200"
-                : "text-blue-600 bg-blue-50 border border-blue-200"
+              isDone
+                ? "text-muted-foreground/40 bg-muted border border-border line-through"
+                : isDuePastOrToday
+                  ? "text-red-600 bg-red-50 border border-red-200"
+                  : "text-blue-600 bg-blue-50 border border-blue-200"
             )}>
               {to}
             </span>
@@ -185,7 +189,7 @@ export function TaskTreeNode({
           onClick={handleStatusClick}
           title="クリックでステータス変更"
           className={cn(
-            "flex items-center gap-1 flex-shrink-0 px-2 py-0.5 rounded-full text-[13px] font-medium transition-opacity hover:opacity-70",
+            "flex items-center justify-center gap-1 flex-shrink-0 w-[62px] py-0.5 rounded-full text-[13px] font-medium transition-opacity hover:opacity-70",
             cfg.bgCls, cfg.textCls
           )}
         >

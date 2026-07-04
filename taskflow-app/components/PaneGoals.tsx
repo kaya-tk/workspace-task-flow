@@ -70,7 +70,7 @@ export function PaneGoals({
               onDragEnd={() => { onReorder(dragIndex!, overIndex ?? dragIndex!); setDragIndex(null); setOverIndex(null) }}
               onDragOver={e => { e.preventDefault(); e.stopPropagation(); setOverIndex(i) }}
               className={cn(
-                "group relative transition-all mb-1 cursor-grab active:cursor-grabbing",
+                "group relative transition-all mb-[6px] cursor-grab active:cursor-grabbing",
                 isDragging && "opacity-40 scale-[0.98]",
                 isOver && "border-t-2 border-primary rounded-t"
               )}

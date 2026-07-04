@@ -94,7 +94,7 @@ export function PaneProjects({
               onClick={() => editingId !== p.id && onSelect(p.id)}
               title={collapsed ? p.name : undefined}
               className={cn(
-                "group relative flex items-center gap-2.5 mx-2 rounded-md cursor-pointer transition-colors select-none",
+                "group relative flex items-center gap-2.5 mx-2 mb-[6px] rounded-md cursor-pointer transition-colors select-none",
                 collapsed ? "px-2 py-2.5 justify-center" : "pl-2.5 pr-1 py-2",
                 isSelected ? "bg-sidebar-accent" : "hover:bg-sidebar-accent/60",
                 overIndex === i && dragIndex !== i && "border-t-2 border-sidebar-foreground/40"

@@ -42,13 +42,13 @@ const STATUS_LABELS: Record<Status, string> = {
   todo: "未着手", inprogress: "進行中", done: "完了", hold: "保留中",
 }
 const STATUS_STYLE: Record<Status, string> = {
-  todo:       "bg-muted text-muted-foreground",
+  todo:       "bg-muted text-muted-foreground border border-transparent",
   inprogress: "bg-blue-50 text-blue-600 border border-blue-200",
-  done:       "bg-green-50 text-green-600",
+  done:       "bg-green-50 text-green-600 border border-transparent",
   hold:       "bg-amber-50 text-amber-600 border border-amber-200",
 }
 const STATUS_CYCLE: Record<Status, Status> = {
-  todo: "inprogress", inprogress: "done", done: "todo", hold: "todo",
+  todo: "inprogress", inprogress: "done", done: "hold", hold: "todo",
 }
 const LABEL_COLORS = [
   "bg-accent text-primary",
@@ -495,7 +495,7 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
           <div className="flex flex-wrap gap-1.5 items-center">
             <button
               onClick={() => onStatusChange?.(detail.id, STATUS_CYCLE[detail.status])}
-              className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[15px] font-medium hover:opacity-75 transition-opacity", STATUS_STYLE[detail.status])}
+              className={cn("inline-flex items-center justify-center gap-1 w-[80px] py-0.5 rounded-full text-[15px] font-medium hover:opacity-75 transition-opacity", STATUS_STYLE[detail.status])}
               title="クリックでステータス変更"
             >
               <StatusIcon status={detail.status} size="sm" />
