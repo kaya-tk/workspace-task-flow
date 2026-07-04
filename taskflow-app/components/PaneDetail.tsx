@@ -105,6 +105,7 @@ function MemoSection({ entityType, entityId }: { entityType: "project" | "goal";
   const [memos, setMemos] = useState<WorkMemo[]>([])
   const [confirmDeleteMemoId, setConfirmDeleteMemoId] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const memoBottomRef = useRef<HTMLDivElement>(null)
   const apiBase = `/api/${entityType}s/${entityId}/memos`
 
   useEffect(() => {
@@ -116,10 +117,14 @@ function MemoSection({ entityType, entityId }: { entityType: "project" | "goal";
       .catch(console.error)
   }, [apiBase])
 
+  useEffect(() => {
+    memoBottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [memos])
+
   const addMemo = async () => {
-    const text = (textareaRef.current?.value ?? "").trim()
+    const text = (textareaRef.current?.value ?? "").trim().replace(/\n{3,}/g, "\n\n")
     if (!text) return
-    if (textareaRef.current) textareaRef.current.value = ""
+    if (textareaRef.current) { textareaRef.current.value = ""; textareaRef.current.style.height = "auto" }
     const res = await api(apiBase, { method: "POST", body: JSON.stringify({ text }) })
     if (!res) return
     const m = await res.json()
@@ -150,6 +155,7 @@ function MemoSection({ entityType, entityId }: { entityType: "project" | "goal";
               </div>
             </div>
           ))}
+          <div ref={memoBottomRef} />
         </div>
       )}
       {confirmDeleteMemoId && (
@@ -163,11 +169,12 @@ function MemoSection({ entityType, entityId }: { entityType: "project" | "goal";
         <textarea
           ref={textareaRef}
           defaultValue=""
-          placeholder="メモを追加... (Shift+Enter で登録)"
+          placeholder="メモを追加... (Ctrl+Enter で登録)"
           rows={2}
-          className="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-border outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground placeholder:text-muted-foreground/50 transition-all resize-none bg-background"
+          className="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-border outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground placeholder:text-muted-foreground/50 transition-all resize-none bg-background overflow-hidden"
+          onInput={e => { const t = e.currentTarget; t.style.height = "auto"; t.style.height = t.scrollHeight + "px" }}
           onKeyDown={e => {
-            if (e.key === "Enter" && e.shiftKey) {
+            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault()
               addMemo()
             }
@@ -353,6 +360,7 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
   const [workMemos, setWorkMemos] = useState<WorkMemo[]>([])
   const [confirmDeleteMemoId, setConfirmDeleteMemoId] = useState<string | null>(null)
   const taskMemoRef = useRef<HTMLTextAreaElement>(null)
+  const taskMemoBottomRef = useRef<HTMLDivElement>(null)
   const [review, setReview] = useState<ReviewEntry>(
     detail?.reviewEntry ?? { good: "", bad: "", next: "" }
   )
@@ -368,6 +376,11 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
       .catch(console.error)
   }, [detail?.id])
 
+  // メモ追加時に最下部へスクロール
+  useEffect(() => {
+    taskMemoBottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [workMemos])
+
   // YYYY/MM/DD or MM/DD → YYYY-MM-DD (for <input type="date">)
   const toInputValue = (d: string): string => {
     if (!d) return ""
@@ -377,10 +390,23 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
   }
   const [startDateInput, setStartDateInput] = useState(toInputValue(detail?.startDate ?? ""))
   const [dueDateInput, setDueDateInput] = useState(toInputValue(detail?.dueDate ?? ""))
+  const [dateError, setDateError] = useState<string | null>(null)
+  const startDateRef = useRef<HTMLInputElement>(null)
+  const dueDateRef = useRef<HTMLInputElement>(null)
+
+  const validateDates = (start: string, due: string): boolean => {
+    if (start && due && start > due) {
+      setDateError("開始日は期限より前の日付を設定してください")
+      return false
+    }
+    setDateError(null)
+    return true
+  }
 
   const handleStartDateChange = (v: string) => {
     setStartDateInput(v)
     if (!detail) return
+    if (!validateDates(v, dueDateInput)) return
     const stored = v ? v.replace(/-/g, "/") : ""
     onStartDateChange?.(detail.id, stored)
   }
@@ -388,6 +414,7 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
   const handleDueDateChange = (v: string) => {
     setDueDateInput(v)
     if (!detail) return
+    if (!validateDates(startDateInput, v)) return
     const stored = v ? v.replace(/-/g, "/") : ""
     onDueDateChange?.(detail.id, stored)
   }
@@ -411,9 +438,9 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
 
   const addMemo = async () => {
     if (!detail) return
-    const text = (taskMemoRef.current?.value ?? "").trim()
+    const text = (taskMemoRef.current?.value ?? "").trim().replace(/\n{3,}/g, "\n\n")
     if (!text) return
-    if (taskMemoRef.current) taskMemoRef.current.value = ""
+    if (taskMemoRef.current) { taskMemoRef.current.value = ""; taskMemoRef.current.style.height = "auto" }
     const res = await api(`/api/tasks/${detail.id}/memos`, { method: "POST", body: JSON.stringify({ text }) })
     if (!res) return
     const m = await res.json()
@@ -510,43 +537,54 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
             <Calendar size={12} className="text-muted-foreground" />
             <span className="text-[14px] font-semibold text-muted-foreground tracking-widest uppercase">日程</span>
           </div>
-          <div className="flex gap-8">
-            <div className="flex flex-col gap-1">
-              <span className="text-xs text-muted-foreground">開始日</span>
-              <div className="flex items-center gap-1">
-                <input
-                  type="date"
-                  value={startDateInput}
-                  onChange={e => handleStartDateChange(e.target.value)}
-                  className="w-[136px] text-xs text-foreground bg-muted border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors"
-                />
-                <div className="w-4 flex items-center justify-center flex-shrink-0">
-                  {startDateInput && (
-                    <button onClick={() => handleStartDateChange("")} className="text-muted-foreground/50 hover:text-muted-foreground transition-colors" title="クリア">
-                      <X size={12} />
-                    </button>
-                  )}
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-8">
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-muted-foreground">開始日</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    ref={startDateRef}
+                    type="date"
+                    value={startDateInput}
+                    onChange={e => handleStartDateChange(e.target.value)}
+                    onKeyDown={e => e.preventDefault()}
+                    onClick={() => startDateRef.current?.showPicker()}
+                    className="w-[136px] text-xs text-foreground bg-muted border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors cursor-pointer"
+                  />
+                  <div className="w-4 flex items-center justify-center flex-shrink-0">
+                    {startDateInput && (
+                      <button onClick={() => handleStartDateChange("")} className="text-muted-foreground/50 hover:text-muted-foreground transition-colors" title="クリア">
+                        <X size={12} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-muted-foreground">期限</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    ref={dueDateRef}
+                    type="date"
+                    value={dueDateInput}
+                    onChange={e => handleDueDateChange(e.target.value)}
+                    onKeyDown={e => e.preventDefault()}
+                    onClick={() => dueDateRef.current?.showPicker()}
+                    className="w-[136px] text-xs text-foreground bg-muted border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors cursor-pointer"
+                  />
+                  <div className="w-4 flex items-center justify-center flex-shrink-0">
+                    {dueDateInput && (
+                      <button onClick={() => handleDueDateChange("")} className="text-muted-foreground/50 hover:text-muted-foreground transition-colors" title="クリア">
+                        <X size={12} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-xs text-muted-foreground">期限</span>
-              <div className="flex items-center gap-1">
-                <input
-                  type="date"
-                  value={dueDateInput}
-                  onChange={e => handleDueDateChange(e.target.value)}
-                  className="w-[136px] text-xs text-foreground bg-muted border border-border rounded-lg px-3 py-1.5 outline-none focus:border-primary/50 transition-colors"
-                />
-                <div className="w-4 flex items-center justify-center flex-shrink-0">
-                  {dueDateInput && (
-                    <button onClick={() => handleDueDateChange("")} className="text-muted-foreground/50 hover:text-muted-foreground transition-colors" title="クリア">
-                      <X size={12} />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
+            {dateError && (
+              <p className="text-xs text-red-500">{dateError}</p>
+            )}
           </div>
         </div>
 
@@ -647,6 +685,7 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
                   </div>
                 </div>
               ))}
+              <div ref={taskMemoBottomRef} />
             </div>
           )}
           {confirmDeleteMemoId && (
@@ -660,11 +699,12 @@ function TaskDetailPanel({ detail, onStatusChange, onTaskTitleChange, onStartDat
             <textarea
               ref={taskMemoRef}
               defaultValue=""
-              placeholder="作業メモを追加... (Shift+Enter で登録)"
+              placeholder="作業メモを追加... (Ctrl+Enter で登録)"
               rows={2}
-              className="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-border outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground placeholder:text-muted-foreground/50 transition-all resize-none bg-background"
+              className="flex-1 text-xs px-2.5 py-1.5 rounded-lg border border-border outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground placeholder:text-muted-foreground/50 transition-all resize-none bg-background overflow-hidden"
+              onInput={e => { const t = e.currentTarget; t.style.height = "auto"; t.style.height = t.scrollHeight + "px" }}
               onKeyDown={e => {
-                if (e.key === "Enter" && e.shiftKey) {
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                   e.preventDefault()
                   addMemo()
                 }
