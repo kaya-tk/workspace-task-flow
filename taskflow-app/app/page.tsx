@@ -107,6 +107,14 @@ export default function Home() {
   const [showTodayOverlay, setShowTodayOverlay] = useState(true)
   const [splashProjectId, setSplashProjectId] = useState<string | null>(null)
   const [seenProjectIds, setSeenProjectIds] = useState<Set<string>>(new Set())
+  const [showProjectSplashSetting, setShowProjectSplashSetting] = useState(true)
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(r => r.json())
+      .then(data => setShowProjectSplashSetting(data.showProjectSplash ?? true))
+      .catch(() => {})
+  }, [])
 
   // ── DB からデータをロード ────────────────────────────────
   useEffect(() => {
@@ -444,7 +452,7 @@ export default function Home() {
     if (firstGoal) setSelectedGoalId(firstGoal.id)
     setSelectedTaskId(null)
     setDetailMode("project")
-    if (!seenProjectIds.has(id)) {
+    if (showProjectSplashSetting && !seenProjectIds.has(id)) {
       setSplashProjectId(id)
       setSeenProjectIds(prev => new Set([...prev, id]))
     }
@@ -504,6 +512,12 @@ export default function Home() {
           taskTitle={detailMode === "task" && taskDetail ? taskDetail.title : null}
           onClickProject={() => handleShowProjectDetail(selectedProjectId)}
           onClickGoal={() => handleShowGoalDetail(selectedGoalId)}
+          showProjectSplash={showProjectSplashSetting}
+          onShowProjectSplashChange={(val) => {
+            setShowProjectSplashSetting(val)
+            // ONに戻したとき既読リセット（再度モーダルを表示できるように）
+            if (val) setSeenProjectIds(new Set())
+          }}
         />
         <div className="flex flex-1 min-h-0">
           <PaneGoals
